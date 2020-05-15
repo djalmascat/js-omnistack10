@@ -17,13 +17,13 @@ module.exports = {
         if (!dev) {
             const apiResponse = await axios.get(`https://api.github.com/users/${github_username}`);
         
-        const { name = login, avatar_url, bio } = apiResponse.data;
+            const { name = login, avatar_url, bio } = apiResponse.data;
     
-        const techsASrray = parseStringAsArray(techs);
+            const techsASrray = parseStringAsArray(techs);
     
-        const location = {
-            type: 'Point',
-            coordinates: [longitude, latitude]
+            const location = {
+                type: 'Point',
+                coordinates: [longitude, latitude]
         };
     
         dev = await Dev.create({
