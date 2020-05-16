@@ -7,7 +7,7 @@ import './Sidebar.css';
 import './Main.css';
 
 function App() {
-
+  const [devs, setDevs] = useState([]);
   const [github_username, setGithubUsername] = useState('');
   const [techs, setTechs] = useState('');
   const [latitude, setLatitude] = useState('');
@@ -32,7 +32,13 @@ function App() {
   }, []);
 
   useEffect(() => {
-    
+    async function loadDevs() {
+      const response = await api.get('/devs');
+
+      setDevs(response.data);
+    }
+
+    loadDevs();
   }, []);
 
   async function handleAddDev(e) {
@@ -47,6 +53,8 @@ function App() {
 
     setGithubUsername('');
     setTechs('');
+    
+    setDevs([...devs, response.data]);
   }
 
   return (
@@ -108,50 +116,19 @@ function App() {
       
       <main>
         <ul>
-          <li className="dev-item">
-            <header>
-              <img src="https://avatars2.githubusercontent.com/u/6811608?s=400&u=27e54fd2d0c10e4666fe91e4f5d9feac4d83afd7&v=4" alt="Bruno Lessa"/>
-              <div className="user-info">
-                <strong>Bruno Lessa</strong>
-                <span>ReactJS, React Native, Node.js</span>
-              </div>
-            </header>
-            <p>My goal is to learn how to code using technologies such javascript, node, react and react native, focusing in build a consistent background in web development.</p>
-            <a href="https://github.com/djalmascat" target="_blank" rel="noopener noreferrer">Acessar perfil no Github</a>
-          </li>
-          <li className="dev-item">
-            <header>
-              <img src="https://avatars2.githubusercontent.com/u/6811608?s=400&u=27e54fd2d0c10e4666fe91e4f5d9feac4d83afd7&v=4" alt="Bruno Lessa"/>
-              <div className="user-info">
-                <strong>Bruno Lessa</strong>
-                <span>ReactJS, React Native, Node.js</span>
-              </div>
-            </header>
-            <p>My goal is to learn how to code using technologies such javascript, node, react and react native, focusing in build a consistent background in web development.</p>
-            <a href="https://github.com/djalmascat" target="_blank" rel="noopener noreferrer">Acessar perfil no Github</a>
-          </li>
-          <li className="dev-item">
-            <header>
-              <img src="https://avatars2.githubusercontent.com/u/6811608?s=400&u=27e54fd2d0c10e4666fe91e4f5d9feac4d83afd7&v=4" alt="Bruno Lessa"/>
-              <div className="user-info">
-                <strong>Bruno Lessa</strong>
-                <span>ReactJS, React Native, Node.js</span>
-              </div>
-            </header>
-            <p>My goal is to learn how to code using technologies such javascript, node, react and react native, focusing in build a consistent background in web development.</p>
-            <a href="https://github.com/djalmascat" target="_blank" rel="noopener noreferrer">Acessar perfil no Github</a>
-          </li>
-          <li className="dev-item">
-            <header>
-              <img src="https://avatars2.githubusercontent.com/u/6811608?s=400&u=27e54fd2d0c10e4666fe91e4f5d9feac4d83afd7&v=4" alt="Bruno Lessa"/>
-              <div className="user-info">
-                <strong>Bruno Lessa</strong>
-                <span>ReactJS, React Native, Node.js</span>
-              </div>
-            </header>
-            <p>My goal is to learn how to code using technologies such javascript, node, react and react native, focusing in build a consistent background in web development.</p>
-            <a href="https://github.com/djalmascat" target="_blank" rel="noopener noreferrer">Acessar perfil no Github</a>
-          </li>
+          {devs.map(dev => (
+            <li key={dev._id} className="dev-item">
+              <header>
+                <img src={dev.avatar_url} alt={dev.name} />
+                <div className="user-info">
+                  <strong>{dev.name}</strong>
+                  <span>{dev.techs.join(', ')}</span>
+                </div>
+              </header>
+              <p>{dev.bio}</p>
+              <a href={`https://github.com/${dev.github_username}`} target="_blank" rel="noopener noreferrer">Acessar perfil no Github</a>
+            </li>
+          ))}
         </ul>
       </main>
     </div>
